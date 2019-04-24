@@ -3,10 +3,14 @@ package vermeer.luc.madlibs;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class FillActivity extends AppCompatActivity {
@@ -16,7 +20,13 @@ public class FillActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill);
-        InputStream is = getResources().openRawResource(R.raw.madlib1_tarzan);
+
+        Intent intent = getIntent();
+        String filename = (String) intent.getSerializableExtra("selectedStory");
+        Log.d("Fill: FILENAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", filename);
+        int fileId = getResources().getIdentifier(filename, "raw", getPackageName());
+        Log.d("FILE_ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", Integer.toString(fileId));
+        InputStream is = getResources().openRawResource(fileId);
         story = new Story(is);
         updateViews();
     }
