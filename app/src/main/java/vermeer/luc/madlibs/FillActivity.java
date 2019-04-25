@@ -1,5 +1,6 @@
 package vermeer.luc.madlibs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +32,7 @@ public class FillActivity extends AppCompatActivity {
         updateViews();
     }
 
-    public void updateViews() {
+    private void updateViews() {
         String wordType = story.getNextPlaceholder();
         int counter = story.getPlaceholderRemainingCount();
 
@@ -53,15 +55,19 @@ public class FillActivity extends AppCompatActivity {
     public void fillWord(View view) {
         EditText input = (EditText) findViewById(R.id.inputFill);
         String inputText = input.getText().toString();
-        story.fillInPlaceholder(inputText);
-        if (story.getPlaceholderRemainingCount() == 0) {
-            Intent intent = new Intent(FillActivity.this, StoryActivity.class);
-            intent.putExtra("madeStory", story);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-            return;
+        if (inputText.equals("")) {
+            Toast.makeText(getApplicationContext(), "Be sure to fill something in!",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            story.fillInPlaceholder(inputText);
+            if (story.getPlaceholderRemainingCount() == 0) {
+                Intent intent = new Intent(FillActivity.this, StoryActivity.class);
+                intent.putExtra("madeStory", story);
+                startActivity(intent);
+                finish();
+                return;
+            }
+            updateViews();
         }
-        updateViews();
     }
 }
