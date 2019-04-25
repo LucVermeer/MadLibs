@@ -13,10 +13,9 @@ public class StoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story);
-
+        getSupportFragmentManager().popBackStack();
         Intent intent = getIntent();
         story = (Story) intent.getSerializableExtra("madeStory");
-
         TextView storyText = (TextView) findViewById(R.id.textStory);
         storyText.setText(story.toString());
     }

@@ -15,7 +15,7 @@ import java.io.InputStream;
 
 public class FillActivity extends AppCompatActivity {
 
-    Story story;
+    public Story story;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +23,9 @@ public class FillActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String filename = (String) intent.getSerializableExtra("selectedStory");
-        Log.d("Fill: FILENAME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", filename);
         int fileId = getResources().getIdentifier(filename, "raw", getPackageName());
-        Log.d("FILE_ID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", Integer.toString(fileId));
         InputStream is = getResources().openRawResource(fileId);
+
         story = new Story(is);
         updateViews();
     }
@@ -40,7 +39,13 @@ public class FillActivity extends AppCompatActivity {
         EditText input = (EditText) findViewById(R.id.inputFill);
 
         infoText.setText("Fill in a/an " + wordType +" below");
-        counterText.setText(Integer.toString(counter) + " more words to complete the story!");
+        if (counter == 1) {
+            counterText.setText("Only 1 more word to complete the story!");
+
+        } else {
+            counterText.setText(Integer.toString(counter) + " more words to complete the story!");
+        }
+
         input.setText("");
         input.setHint(wordType);
     }
@@ -52,7 +57,9 @@ public class FillActivity extends AppCompatActivity {
         if (story.getPlaceholderRemainingCount() == 0) {
             Intent intent = new Intent(FillActivity.this, StoryActivity.class);
             intent.putExtra("madeStory", story);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
             return;
         }
         updateViews();
