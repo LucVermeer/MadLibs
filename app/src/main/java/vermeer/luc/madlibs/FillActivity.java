@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,15 @@ public class FillActivity extends AppCompatActivity {
 
         story = new Story(is);
         updateViews();
+        if (savedInstanceState != null) {
+            story = (Story) savedInstanceState.getSerializable("story");
+            updateViews();
+        }
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState); // always call super
+        outState.putSerializable("story", story);
     }
 
     private void updateViews() {
@@ -47,7 +57,6 @@ public class FillActivity extends AppCompatActivity {
         } else {
             counterText.setText(Integer.toString(counter) + " more words to complete the story!");
         }
-
         input.setText("");
         input.setHint(wordType);
     }
